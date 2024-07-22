@@ -8,3 +8,6 @@ This script provides the tooling to configure a Mikroitk Roouter OS device to se
 ### Prerequesites:
 - GPS and IoT packages must be installed
 - MQTT Broker (tested with Mosquitto 2.0.18)
+
+## Node RED
+Node RED is used to convert the JSON message from the MQTT Broker to CoT XML which is then sent to the TAK Server. The output can also be pushed via multicast for use without a TAK server on the local network (or maybe you are taking advantage of multicast routing). The flow JSON file is included but you will need to install the node-red-contrib-tak nodes in your instance of Node RED.
