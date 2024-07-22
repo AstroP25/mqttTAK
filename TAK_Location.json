@@ -1,0 +1,148 @@
+[
+    {
+        "id": "b29667e5e83d23e4",
+        "type": "tab",
+        "label": "TAK MQTT Location",
+        "disabled": false,
+        "info": "Converts MQTT JSON from Mikrotik device to CoT readable by TAK server.",
+        "env": []
+    },
+    {
+        "id": "55c2764999091619",
+        "type": "mqtt in",
+        "z": "b29667e5e83d23e4",
+        "name": "",
+        "topic": "v1/devices/mikrotik/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "fc5b909d5e919829",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 160,
+        "wires": [
+            [
+                "fef6e15864e82e04"
+            ]
+        ]
+    },
+    {
+        "id": "33084938be405ef4",
+        "type": "debug",
+        "z": "b29667e5e83d23e4",
+        "name": "JSON Message",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "b187469f437c29fd",
+        "type": "tak",
+        "z": "b29667e5e83d23e4",
+        "name": "TAK",
+        "x": 470,
+        "y": 300,
+        "wires": [
+            [
+                "d6a30419df87b53f",
+                "de1cec553f80476a"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "d6a30419df87b53f",
+        "type": "tcp out",
+        "z": "b29667e5e83d23e4",
+        "name": "",
+        "host": "172.29.2.3",
+        "port": "8087",
+        "beserver": "client",
+        "base64": false,
+        "end": false,
+        "tls": "",
+        "x": 740,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "de1cec553f80476a",
+        "type": "debug",
+        "z": "b29667e5e83d23e4",
+        "name": "CoT as XML",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 710,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "fef6e15864e82e04",
+        "type": "function",
+        "z": "b29667e5e83d23e4",
+        "name": "function 1",
+        "func": "var lat=msg.payload.latitude\nvar lon=msg.payload.longitude\nvar id=msg.payload.callsign\nvar alt=msg.payload.altitude\n\nconst cinco = 5 * 60 * 1000;\nconst diez = 2 * cinco;\nconst stale = new Date(Date.now() + diez).toISOString();\n\nvar newMsg;\n\nnewMsg = { payload: {\n    \"event\": {\n        \"_attributes\": {\n            \"version\": \"2.0\",\n            \"uid\": id,\n            \"type\": \"a-f-G-U-S-T-A-C\",\n            \"how\": \"m-p\",\n            \"time\": new Date(Date.now()).toISOString(),\n            \"start\": new Date(Date.now()).toISOString(),\n            \"stale\": new Date(Date.now()+500000).toISOString()\n        },\n        \"point\": {\n            \"_attributes\": {\n                \"lat\": lat,\n                \"lon\": lon,\n                \"hae\": alt,\n                \"ce\": \"9999999.0\",\n                \"le\": \"9999999.0\"\n            }\n        },\n        \"detail\": {}\n    }\n}};\nreturn newMsg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 240,
+        "wires": [
+            [
+                "b187469f437c29fd",
+                "33084938be405ef4"
+            ]
+        ]
+    },
+    {
+        "id": "fc5b909d5e919829",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "172.29.2.1",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]

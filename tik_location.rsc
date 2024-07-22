@@ -35,7 +35,8 @@ add dont-require-permissions=no name=mqttgps owner=admin policy=\
     \n    :local message \\\r\
     \n    \"{\\\"latitude\\\":\$lat,\\\r\
     \n    \\\"longitude\\\":\$lon,\\\r\
-    \n    \\\"altitude\\\":\$alt2}\"\r\
+    \n    \\\"altitude\\\":\$alt2,\\\
+    \n    \\\"callsign\\\":\$call}"\r\
     \n\r\
     \n    ###MQTT###\r\
     \n    :if (\$lat != \"none\") do={\\\r\
