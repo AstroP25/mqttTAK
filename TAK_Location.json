@@ -1,6 +1,6 @@
 [
     {
-        "id": "b29667e5e83d23e4",
+        "id": "368ae4b88017c1b7",
         "type": "tab",
         "label": "TAK MQTT Location",
         "disabled": false,
@@ -8,9 +8,9 @@
         "env": []
     },
     {
-        "id": "55c2764999091619",
+        "id": "f0f49ca8952e9215",
         "type": "mqtt in",
-        "z": "b29667e5e83d23e4",
+        "z": "368ae4b88017c1b7",
         "name": "",
         "topic": "v1/devices/mikrotik/#",
         "qos": "2",
@@ -24,15 +24,15 @@
         "y": 160,
         "wires": [
             [
-                "fef6e15864e82e04",
-                "2d684c3b35f3bb89"
+                "395dea118d69a6b9",
+                "384b0a335cceb65a"
             ]
         ]
     },
     {
-        "id": "33084938be405ef4",
+        "id": "fad14fd54891a228",
         "type": "debug",
-        "z": "b29667e5e83d23e4",
+        "z": "368ae4b88017c1b7",
         "name": "New JSON Message",
         "active": false,
         "tosidebar": true,
@@ -47,25 +47,25 @@
         "wires": []
     },
     {
-        "id": "b187469f437c29fd",
+        "id": "c64a235e829c996f",
         "type": "tak",
-        "z": "b29667e5e83d23e4",
+        "z": "368ae4b88017c1b7",
         "name": "TAK",
         "x": 610,
         "y": 220,
         "wires": [
             [
-                "d6a30419df87b53f",
-                "de1cec553f80476a"
+                "5f8f2cd3547e689a",
+                "70d0c1b320ec5973"
             ],
             [],
             []
         ]
     },
     {
-        "id": "d6a30419df87b53f",
+        "id": "5f8f2cd3547e689a",
         "type": "tcp out",
-        "z": "b29667e5e83d23e4",
+        "z": "368ae4b88017c1b7",
         "name": "",
         "host": "172.29.2.3",
         "port": "8087",
@@ -78,9 +78,9 @@
         "wires": []
     },
     {
-        "id": "de1cec553f80476a",
+        "id": "70d0c1b320ec5973",
         "type": "debug",
-        "z": "b29667e5e83d23e4",
+        "z": "368ae4b88017c1b7",
         "name": "CoT as XML",
         "active": false,
         "tosidebar": true,
@@ -95,9 +95,9 @@
         "wires": []
     },
     {
-        "id": "fef6e15864e82e04",
+        "id": "395dea118d69a6b9",
         "type": "function",
-        "z": "b29667e5e83d23e4",
+        "z": "368ae4b88017c1b7",
         "name": "Convert to new format for TAK node",
         "func": "var lat=msg.payload.latitude\nvar lon=msg.payload.longitude\nvar id=msg.payload.sn\nvar alt=msg.payload.altitude\nvar callsgn=msg.payload.callsign\n\nconst cinco = 5 * 60 * 1000;\nconst diez = 2 * cinco;\nconst stale = new Date(Date.now() + diez).toISOString();\n\nvar newMsg;\n\nnewMsg = { payload: {\n    \"event\": {\n        \"_attributes\": {\n            \"version\": \"2.0\",\n            \"uid\": id,\n            \"type\": \"a-f-G-U-S-T-A-C\",\n            \"how\": \"m-p\",\n            \"time\": new Date(Date.now()).toISOString(),\n            \"start\": new Date(Date.now()).toISOString(),\n            \"stale\": new Date(Date.now()+500000).toISOString()\n        },\n        \"point\": {\n            \"_attributes\": {\n                \"lat\": lat,\n                \"lon\": lon,\n                \"hae\": alt,\n                \"ce\": \"9999999.0\",\n                \"le\": \"9999999.0\"\n            }\n        },\n        \"detail\": {\n            \"contact\": {\n                \"callsign\": callsgn\n            }\n        }\n    }\n}};\nreturn newMsg;",
         "outputs": 1,
@@ -110,15 +110,15 @@
         "y": 240,
         "wires": [
             [
-                "b187469f437c29fd",
-                "33084938be405ef4"
+                "c64a235e829c996f",
+                "fad14fd54891a228"
             ]
         ]
     },
     {
-        "id": "2d684c3b35f3bb89",
+        "id": "384b0a335cceb65a",
         "type": "debug",
-        "z": "b29667e5e83d23e4",
+        "z": "368ae4b88017c1b7",
         "name": "JSON from MQTT",
         "active": false,
         "tosidebar": true,
@@ -131,6 +131,55 @@
         "x": 610,
         "y": 120,
         "wires": []
+    },
+    {
+        "id": "c73d127f67db8fd3",
+        "type": "inject",
+        "z": "368ae4b88017c1b7",
+        "name": "Test Trigger",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 90,
+        "y": 460,
+        "wires": [
+            [
+                "2d162e2e093f3671"
+            ]
+        ]
+    },
+    {
+        "id": "2d162e2e093f3671",
+        "type": "function",
+        "z": "368ae4b88017c1b7",
+        "name": "Test Mikrotik Payload",
+        "func": "msg = { payload:{\n    \"latitude\":30.7639,\n    \"longitude\":-98.2266,\n    \"altitude\":395,\n    \"callsign\":\"MikrotikTAK Test\",\n    \"sn\":\"867-5309\"}\n    };\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 160,
+        "y": 360,
+        "wires": [
+            [
+                "395dea118d69a6b9"
+            ]
+        ]
     },
     {
         "id": "fc5b909d5e919829",
