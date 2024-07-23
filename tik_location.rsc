@@ -4,7 +4,7 @@
 # model = RB924i-2nD-BT5&BG77
 # serial number = F5830EAD8DFD
 /system script
-add dont-require-permissions=no name=mqttgps owner=zapman policy=\
+add dont-require-permissions=no name=mqttgps owner=admin policy=\
     ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source=" \
     \_  ###Configuration###\r\
     \n\r\
